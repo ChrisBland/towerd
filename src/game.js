@@ -1,4 +1,4 @@
-class Game {
+export class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -555,6 +555,9 @@ class Game {
         
         // Update and draw towers
         for (const tower of this.towers) {
+            // Skip towers that have been sold
+            if (!this.towers.includes(tower)) continue;
+            
             tower.update(this.enemies, deltaTime, this.speedMultiplier);
             tower.draw(this.ctx, tower === this.selectedTower || tower.type === this.selectedTowerType);
         }
@@ -642,6 +645,12 @@ class Game {
     }
 
     showTowerMenu(tower) {
+        // Don't show menu if tower doesn't exist anymore
+        if (!this.towers.includes(tower)) {
+            this.hideTowerMenu();
+            return;
+        }
+
         this.hideTowerMenu(); // Remove any existing menu
 
         const menu = document.createElement('div');
@@ -680,7 +689,7 @@ class Game {
         });
 
         menu.querySelector('.sell-btn').addEventListener('click', () => {
-            this.sellTower(tower, true);
+            this.sellTower(tower, false);
             this.hideTowerMenu();
         });
 
@@ -838,7 +847,18 @@ class Game {
         if (index > -1) {
             const sellPrice = Math.floor(this.towerCosts[tower.type] * tower.level * 0.6);
             this.gold += sellPrice;
+            
+            // Clean up tower's projectiles
+            tower.projectiles = [];
+            
+            // Remove tower from array
             this.towers.splice(index, 1);
+            
+            // Clear selection if this tower was selected
+            if (this.selectedTower === tower) {
+                this.selectedTower = null;
+            }
+            
             this.updateHUD();
 
             if (!isAutoSell) {

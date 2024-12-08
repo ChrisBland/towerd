@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="fastGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FF4444"/>
+            <stop offset="100%" style="stop-color:#FF8866"/>
+        </linearGradient>
+    </defs>
+    <!-- Body -->
+    <path d="M5,15 L15,5 L25,15 L15,25 Z" fill="url(#fastGradient)">
+        <animateTransform attributeName="transform"
+                          attributeType="XML"
+                          type="rotate"
+                          from="0 15 15"
+                          to="360 15 15"
+                          dur="1s"
+                          repeatCount="indefinite"/>
+    </path>
+    <!-- Eyes -->
+    <circle cx="12" cy="12" r="2" fill="white"/>
+    <circle cx="18" cy="12" r="2" fill="white"/>
+    <!-- Speed lines -->
+    <path d="M4,15 L1,15 M26,15 L29,15" stroke="#FF4444" stroke-width="2">
+        <animate attributeName="opacity"
+                 values="0;1;0"
+                 dur="0.5s"
+                 repeatCount="indefinite"/>
+    </path>
+</svg> 

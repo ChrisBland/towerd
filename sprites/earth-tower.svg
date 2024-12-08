@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="earthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#44AA44"/>
+            <stop offset="100%" style="stop-color:#668844"/>
+        </linearGradient>
+    </defs>
+    <rect x="5" y="25" width="30" height="15" fill="#666"/>
+    <path d="M15,10 L25,10 L30,15 L25,20 L30,25 L25,30 L15,30 L10,25 L15,20 L10,15 Z" 
+          fill="url(#earthGradient)" stroke="#44AA44" stroke-width="2">
+        <animate attributeName="transform" 
+                 attributeType="XML" 
+                 type="rotate" 
+                 from="0 20 20" 
+                 to="360 20 20" 
+                 dur="3s" 
+                 repeatCount="indefinite"/>
+    </path>
+</svg> 

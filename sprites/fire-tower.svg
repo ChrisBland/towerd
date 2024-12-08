@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="fireGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#FF4400"/>
+            <stop offset="100%" style="stop-color:#FF8800"/>
+        </linearGradient>
+    </defs>
+    <rect x="5" y="25" width="30" height="15" fill="#666"/>
+    <path d="M20,5 Q25,15 30,20 Q25,25 20,30 Q15,25 10,20 Q15,15 20,5" 
+          fill="url(#fireGradient)">
+        <animate attributeName="d" 
+                 dur="0.5s" 
+                 repeatCount="indefinite" 
+                 values="M20,5 Q25,15 30,20 Q25,25 20,30 Q15,25 10,20 Q15,15 20,5;
+                         M20,5 Q25,15 30,18 Q25,23 20,30 Q15,23 10,18 Q15,15 20,5;
+                         M20,5 Q25,15 30,20 Q25,25 20,30 Q15,25 10,20 Q15,15 20,5"/>
+    </path>
+</svg> 

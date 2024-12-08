@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4444FF"/>
+            <stop offset="100%" style="stop-color:#0088FF"/>
+        </linearGradient>
+    </defs>
+    <rect x="5" y="25" width="30" height="15" fill="#666"/>
+    <path d="M10,15 Q20,10 30,15 Q20,20 10,15 M10,20 Q20,15 30,20 Q20,25 10,20" 
+          fill="url(#waterGradient)" stroke="#4444FF" stroke-width="2">
+        <animate attributeName="d" 
+                 dur="2s" 
+                 repeatCount="indefinite" 
+                 values="M10,15 Q20,10 30,15 Q20,20 10,15 M10,20 Q20,15 30,20 Q20,25 10,20;
+                         M10,15 Q20,12 30,15 Q20,18 10,15 M10,20 Q20,17 30,20 Q20,23 10,20;
+                         M10,15 Q20,10 30,15 Q20,20 10,15 M10,20 Q20,15 30,20 Q20,25 10,20"/>
+    </path>
+</svg> 

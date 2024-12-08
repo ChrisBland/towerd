@@ -31,122 +31,151 @@ body {
 
 .hud {
     width: 800px;
-    padding: 8px 15px;
-    background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-    border: 2px solid #555;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 12px 20px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95));
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    backdrop-filter: blur(5px);
 }
 
 .stats {
     display: flex;
-    gap: 20px;
+    gap: 25px;
     align-items: center;
-    font-size: 14px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .stats span {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .stats span::before {
     content: '';
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    vertical-align: middle;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
 
-.stats span:nth-child(1)::before {
-    background-image: url('sprites/gold-icon.svg');
+.stat-lives {
+    color: #ff6b6b;
 }
 
-.stats span:nth-child(2)::before {
-    background-image: url('sprites/level-icon.svg');
+.stat-level {
+    color: #4fd1c5;
 }
 
-.stats span:nth-child(3)::before {
-    background-image: url('sprites/heart-icon.svg');
+.stat-gold {
+    color: #ffd700;
 }
 
 .tower-selection {
     display: flex;
-    gap: 8px;
+    gap: 12px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .tower-btn {
     position: relative;
-    width: 50px;
-    height: 50px;
-    padding: 4px;
-    border: 2px solid #666;
-    border-radius: 6px;
+    width: 60px;
+    height: 60px;
+    padding: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: linear-gradient(to bottom, #3a3a3a, #2a2a2a);
+    transition: all 0.3s ease;
+    background: linear-gradient(to bottom, rgba(58, 58, 58, 0.9), rgba(42, 42, 42, 0.9));
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 .tower-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    border-color: #888;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+    filter: brightness(1.2);
 }
 
 .tower-btn:active {
     transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .tower-btn .tower-icon {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
 
 .tower-btn .tower-cost {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: 600;
     color: #ffd700;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-top: 2px;
 }
 
 .tower-btn[data-type="fire"] {
-    background: linear-gradient(to bottom, #4a2828, #3a1818);
-    border-color: #ff4444;
+    background: linear-gradient(to bottom, rgba(74, 40, 40, 0.9), rgba(58, 24, 24, 0.9));
+    border-color: rgba(255, 68, 68, 0.3);
 }
 
 .tower-btn[data-type="fire"]:hover {
-    background: linear-gradient(to bottom, #5a3838, #4a2828);
+    background: linear-gradient(to bottom, rgba(90, 56, 56, 0.9), rgba(74, 40, 40, 0.9));
+    border-color: rgba(255, 68, 68, 0.5);
 }
 
 .tower-btn[data-type="water"] {
-    background: linear-gradient(to bottom, #282848, #181838);
-    border-color: #4444ff;
+    background: linear-gradient(to bottom, rgba(40, 40, 72, 0.9), rgba(24, 24, 56, 0.9));
+    border-color: rgba(68, 68, 255, 0.3);
 }
 
 .tower-btn[data-type="water"]:hover {
-    background: linear-gradient(to bottom, #383858, #282848);
+    background: linear-gradient(to bottom, rgba(56, 56, 88, 0.9), rgba(40, 40, 72, 0.9));
+    border-color: rgba(68, 68, 255, 0.5);
 }
 
 .tower-btn[data-type="earth"] {
-    background: linear-gradient(to bottom, #284828, #183818);
-    border-color: #44aa44;
+    background: linear-gradient(to bottom, rgba(40, 72, 40, 0.9), rgba(24, 56, 24, 0.9));
+    border-color: rgba(68, 170, 68, 0.3);
 }
 
 .tower-btn[data-type="earth"]:hover {
-    background: linear-gradient(to bottom, #385838, #284828);
+    background: linear-gradient(to bottom, rgba(56, 88, 56, 0.9), rgba(40, 72, 40, 0.9));
+    border-color: rgba(68, 170, 68, 0.5);
 }
 
 .fast-forward-btn {
@@ -245,4 +274,16 @@ body {
 
 .tower-btn[data-type="earth"] .tower-icon {
     background-image: url('sprites/earth-tower.svg');
+}
+
+.stat-lives::before {
+    background-image: url('sprites/heart-icon.svg');
+}
+
+.stat-level::before {
+    background-image: url('sprites/level-icon.svg');
+}
+
+.stat-gold::before {
+    background-image: url('sprites/gold-icon.svg');
 }

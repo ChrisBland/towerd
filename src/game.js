@@ -994,6 +994,17 @@ class Tower {
         this.projectiles = [];
         this.target = null;
         this.size = 40;
+        this.showRangeIndicator = false;
+        this.rangeAnimationProgress = 0;
+        this.oldRange = this.range;
+        this.newRange = this.range;
+        
+        // Tower colors
+        this.towerColors = {
+            fire: { color: 'rgba(255, 68, 68, 0.3)', glow: 'rgba(255, 68, 68, 0.6)' },
+            water: { color: 'rgba(68, 68, 255, 0.3)', glow: 'rgba(68, 68, 255, 0.6)' },
+            earth: { color: 'rgba(68, 170, 68, 0.3)', glow: 'rgba(68, 170, 68, 0.6)' }
+        };
         
         // Special effects values
         this.slowAmount = this.getSlowAmount();
@@ -1077,14 +1088,41 @@ class Tower {
 
     upgrade() {
         if (this.canUpgrade()) {
+            this.oldRange = this.range;
             this.level++;
+            
             // Update all stats
-            this.range = this.getRange();
+            this.newRange = this.getRange();
+            this.range = this.newRange; // Update actual range for gameplay
             this.damage = this.getDamage();
             this.cooldown = this.getCooldown();
             this.slowAmount = this.getSlowAmount();
             this.slowDuration = this.getSlowDuration();
             this.burnMultiplier = this.getBurnMultiplier();
+            
+            // Show range indicator with animation
+            this.showRangeIndicator = true;
+            this.rangeAnimationProgress = 0;
+            
+            // Animate the range indicator
+            const startTime = Date.now();
+            const animateDuration = 1000; // 1 second animation
+            
+            const animate = () => {
+                const elapsed = Date.now() - startTime;
+                this.rangeAnimationProgress = Math.min(elapsed / animateDuration, 1);
+                
+                if (this.rangeAnimationProgress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Animation complete
+                    setTimeout(() => {
+                        this.showRangeIndicator = false;
+                    }, 500); // Show for 0.5 more seconds after animation
+                }
+            };
+            
+            requestAnimationFrame(animate);
         }
     }
 
@@ -1115,13 +1153,39 @@ class Tower {
     }
 
     draw(ctx, showRange) {
-        // Draw range indicator if tower is selected
-        if (showRange) {
+        // Draw range indicator if tower is selected or showRangeIndicator is true
+        if (showRange || this.showRangeIndicator) {
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.range, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 1;
+            
+            // Calculate the current display range based on animation progress
+            let displayRange;
+            if (this.showRangeIndicator) {
+                // Ease out cubic animation
+                const easeOutProgress = 1 - Math.pow(1 - this.rangeAnimationProgress, 3);
+                displayRange = this.oldRange + (this.newRange - this.oldRange) * easeOutProgress;
+            } else {
+                displayRange = this.range;
+            }
+            
+            ctx.arc(this.x, this.y, displayRange, 0, Math.PI * 2);
+            
+            if (this.showRangeIndicator) {
+                // Upgraded range indicator with tower-specific colors
+                ctx.strokeStyle = this.towerColors[this.type].color;
+                ctx.lineWidth = 3;
+                
+                // Add glow effect with tower-specific color
+                ctx.shadowColor = this.towerColors[this.type].glow;
+                ctx.shadowBlur = 10;
+            } else {
+                // Normal range indicator with tower-specific colors but more transparent
+                ctx.strokeStyle = this.towerColors[this.type].color.replace('0.3', '0.15');
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 0;
+            }
+            
             ctx.stroke();
+            ctx.shadowBlur = 0; // Reset shadow for other drawings
         }
 
         // Draw tower sprite with level-based effects

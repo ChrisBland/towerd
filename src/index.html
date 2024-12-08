@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower Defense Game</title>
+</head>
+
+<body>
+    <div class="game-container">
+        <div class="hud">
+            <div class="stats">
+                <span id="gold-container"><span id="gold"></span></span>
+                <span id="round-container">L<span id="round"></span></span>
+                <span id="lives-container"><span id="lives">10</span></span>
+            </div>
+            <div class="tower-selection">
+                <button class="tower-btn" data-type="fire">
+                    <div class="tower-icon"></div>
+                    <div class="tower-cost">$100</div>
+                </button>
+                <button class="tower-btn" data-type="water">
+                    <div class="tower-icon"></div>
+                    <div class="tower-cost">$150</div>
+                </button>
+                <button class="tower-btn" data-type="earth">
+                    <div class="tower-icon"></div>
+                    <div class="tower-cost">$125</div>
+                </button>
+            </div>
+        </div>
+        <button id="fast-forward" class="fast-forward-btn">
+            <span class="speed-text">1x</span>
+        </button>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+</body>
+
+</html>

@@ -60,6 +60,8 @@ export class Game {
         this.spritesLoaded = 0;
         this.totalSprites = 6;
 
+        this.intervals = [];
+
         this.devMode = false;
         this.setupDevMode();
         this.setupEventListeners();
@@ -67,9 +69,10 @@ export class Game {
 
         // Initialize HUD
         this.updateHUD();
-        
-        // Start game loop
-        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+
+        // Note: the game loop is started in startGame(), once sprites have
+        // finished loading. Starting it here as well would run two concurrent
+        // rAF loops and double the effective game speed.
     }
 
     loadSprites() {
@@ -299,7 +302,23 @@ export class Game {
                     '#FFD700',
                     3000
                 );
+                this.updateHUD();
             }, 1500);
+
+            // Advance to the next level once the celebration has played out.
+            // Previously this branch never incremented the level, regenerated
+            // the path, or restarted the waves, so the game stalled after the
+            // first level was cleared.
+            setTimeout(() => {
+                this.level++;
+                this.wave = 1;
+                this.enemiesSpawned = 0;
+                this.enemiesDefeatedInWave = 0;
+                this.path = this.generateLevel();
+                this.nextWaveCountdown = 5;
+                this.startWaveCountdown();
+                this.updateHUD();
+            }, 2500);
         } else {
             // Immediate level transition for dev mode
             this.path = this.generateLevel();
@@ -323,11 +342,21 @@ export class Game {
     }
 
     startInterestTimer() {
-        setInterval(() => {
+        const id = setInterval(() => {
             const interest = Math.floor(this.gold * 0.07);
             this.gold += interest;
             this.updateHUD();
         }, 6000);
+        this.intervals.push(id);
+    }
+
+    clearAllIntervals() {
+        this.intervals.forEach(id => clearInterval(id));
+        this.intervals = [];
+        if (this.spawnInterval) {
+            clearInterval(this.spawnInterval);
+            this.spawnInterval = null;
+        }
     }
 
     setupEventListeners() {
@@ -488,7 +517,7 @@ export class Game {
         this.lives--;
         if (this.lives <= 0) {
             this.gameOver = true;
-            clearInterval(this.spawnInterval);
+            this.clearAllIntervals();
             this.showGameOver();
         }
     }
@@ -519,7 +548,9 @@ export class Game {
 
     updateHUD() {
         document.getElementById('gold').textContent = this.gold;
-        document.getElementById('round').textContent = `L${this.level}-W${this.wave}${this.devMode ? ' [DEV]' : ''}`;
+        // index.html already renders a literal "L" before this span, so emit
+        // only the numeric portion to avoid a doubled "LL".
+        document.getElementById('round').textContent = `${this.level}-W${this.wave}${this.devMode ? ' [DEV]' : ''}`;
         const livesSpan = document.getElementById('lives');
         if (!livesSpan) {
             const statsDiv = document.querySelector('.stats');
@@ -639,9 +670,11 @@ export class Game {
             this.nextWaveCountdown--;
             if (this.nextWaveCountdown <= 0) {
                 clearInterval(countdownInterval);
+                this.intervals = this.intervals.filter(id => id !== countdownInterval);
                 this.startWave();
             }
         }, 1000);
+        this.intervals.push(countdownInterval);
     }
 
     showTowerMenu(tower) {
@@ -1313,8 +1346,8 @@ class Enemy {
         this.speed = this.baseSpeed;
         this.maxHealth = this.health;
         this.reachedEnd = false;
-        this.burnDamage = 0;
-        this.burnTicks = 0;
+        this.burnDamage = 0;      // damage per second while burning
+        this.burnDuration = 0;    // remaining burn time in ms
         this.slowDuration = 0;
         this.size = 30;
     }
@@ -1326,8 +1359,9 @@ class Enemy {
     }
 
     applyBurn(burnDamage) {
+        // burnDamage is interpreted as damage-per-second; refresh to a 3s burn.
         this.burnDamage = burnDamage;
-        this.burnTicks = 3;
+        this.burnDuration = 3000;
     }
 
     update(deltaTime) {
@@ -1336,11 +1370,12 @@ class Enemy {
             return;
         }
 
-        // Apply burn damage
-        if (this.burnTicks > 0) {
+        // Apply burn damage over time (frame-rate independent)
+        if (this.burnDuration > 0) {
             this.health -= this.burnDamage * (deltaTime / 1000);
-            this.burnTicks--;
-            if (this.burnTicks === 0) {
+            this.burnDuration -= deltaTime;
+            if (this.burnDuration <= 0) {
+                this.burnDuration = 0;
                 this.burnDamage = 0;
             }
         }
@@ -1408,7 +1443,7 @@ class Enemy {
         );
 
         // Draw status effect indicators
-        if (this.burnTicks > 0) {
+        if (this.burnDuration > 0) {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size/2 + 5, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(255, 100, 0, 0.5)';
@@ -1423,4 +1458,5 @@ class Enemy {
     }
 }
 
-new Game(); 
+// The game is bootstrapped from index.js on DOMContentLoaded. Instantiating
+// here as well would create a second Game on the same canvas.
